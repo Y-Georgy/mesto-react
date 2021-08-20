@@ -1,35 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import '../index.css';
+import { Header } from './Header/Header';
+import { Main } from './Main/Main';
+import { Footer } from './Footer/Footer';
 
 function App() {
   return (
     <div className="page">
-      <header className="header page__header">
-        <img src="./images/logo.svg" alt="Логотип Mesto" className="header__logo" />
-      </header>
-      <main className="content">
-        <section className="profile">
-          <div className="profile__author">
-            <img className="profile__avatar" src="#" alt="Аватар автора" />
-            <div className="profile__overlay-avatar"></div>
-            <div className="profile__text">
-              <div className="profile__title-overlay">
-                <h1 className="profile__title"></h1>
-                <button type="button" className="profile__edit-button" aria-label="Редактировать"></button>
-              </div>
-              <p className="profile__subtitle"></p>
-            </div>
-          </div>
-          <button type="button" className="profile__add-button" aria-label="Добавить"></button>
-        </section>
-        <section className="elements">
-          <ul className="elements__list">
-          </ul>
-        </section>
-      </main>
-      <footer className="footer">
-        <p className="footer__text">© 2021 Mesto Russia</p>
-      </footer>
+      <Header />
+      <Main />
+      <Footer footerText="© 2021 Mesto Russia" />
       <div className="popup popup_type_edit">
         <form method="POST" className="popup__container" name="formAuthor" novalidate>
           <button type="reset" className="popup__icon-close" aria-label="Закрыть"></button>
@@ -97,19 +76,19 @@ function App() {
 
 export default App;
 
-    // <div className="App">
-    //    <header className="App-header">
-    //      <img src={logo} className="App-logo" alt="logo" />
-    //      <p>
-    //        Edit <code>src/App.js</code> and save to reload.
-    //      </p>
-    //      <a
-    //        className="App-link"
-    //        href="https://reactjs.org"
-    //        target="_blank"
-    //        rel="noopener noreferrer"
-    //      >
-    //        Learn React
-    //      </a>
-    //    </header>
-    //  </div>
+// <div className="App">
+//    <header className="App-header">
+//      <img src={logo} className="App-logo" alt="logo" />
+//      <p>
+//        Edit <code>src/App.js</code> and save to reload.
+//      </p>
+//      <a
+//        className="App-link"
+//        href="https://reactjs.org"
+//        target="_blank"
+//        rel="noopener noreferrer"
+//      >
+//        Learn React
+//      </a>
+//    </header>
+//  </div>
