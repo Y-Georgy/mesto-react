@@ -1,4 +1,4 @@
-export const Card = ({ likes, link, name, owner }) => {
+export const Card = (likes, name, link) => {
   // console.log(likes.length)
   // console.log(link)
   // console.log(name)
