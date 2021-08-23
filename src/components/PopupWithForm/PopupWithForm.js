@@ -1,8 +1,4 @@
 export const PopupWithForm = ({ title, name, children, isOpen, onClose }) => {
-  function myCons(e) {
-    console.log(e)
-  }
-
   return (
     <div className={`popup popup_type_${name}${isOpen ? ' popup_opened' : ''}`} onClick={onClose}>
       <form method="POST" className="popup__container" name={name} novalidate>

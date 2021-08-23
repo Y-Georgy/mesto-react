@@ -1,5 +1,5 @@
 import '../index.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from './Header/Header'
 import { Main } from './Main/Main'
 import { Footer } from './Footer/Footer'
@@ -7,6 +7,7 @@ import { PopupWithForm } from './PopupWithForm/PopupWithForm'
 import { ImagePopup } from './ImagePopup/ImagePopup'
 
 function App() {
+  // обработчики кнопок на странице
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -14,15 +15,14 @@ function App() {
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
   }
-
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true)
   }
-
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true)
   }
 
+  // закрытие всех попапов
   function closeAllPopups(e) {
     if (e.target.classList.contains('popup_opened') || e.target.classList.contains('popup__icon-close')) {
       setIsEditAvatarPopupOpen(false)
@@ -72,21 +72,6 @@ function App() {
           Сохранить
         </button>
       </PopupWithForm>
-
-      <template className="element-template">
-        <li className="element">
-          <div className="element__overlay-img"></div>
-          <img className="element__img" />
-          <div className="element__name-overlay">
-            <h2 className="element__title"></h2>
-            <div className="element__like-overlay">
-              <button type="button" className="element__icon-like" aria-label="Нравиться"></button>
-              <span className="element__like-quantity">0</span>
-            </div>
-          </div>
-          <button type="button" className="element__icon-delete" aria-label="Удалить"></button>
-        </li>
-      </template>
     </div>
   )
 }
