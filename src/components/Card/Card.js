@@ -1,17 +1,17 @@
-export const Card = (likes, name, link) => {
-  // console.log(likes.length)
-  // console.log(link)
-  // console.log(name)
+export const Card = ({card, onCardClick}) => {
+  function handleClick() {
+    onCardClick(card);
+  }
 
   return (
     <li className="element">
-      <div className="element__overlay-img"></div>
-      <img className="element__img" src={link} />
+      <div className="element__overlay-img" onClick={handleClick}></div>
+      <img className="element__img" src={card.link} alt="Фотография карточки" />
       <div className="element__name-overlay">
-        <h2 className="element__title">{name}</h2>
+        <h2 className="element__title">{card.name}</h2>
         <div className="element__like-overlay">
           <button type="button" className="element__icon-like" aria-label="Нравиться"></button>
-          <span className="element__like-quantity">{likes}</span>
+          <span className="element__like-quantity">{card.likes.length}</span>
         </div>
       </div>
       <button type="button" className="element__icon-delete" aria-label="Удалить"></button>
