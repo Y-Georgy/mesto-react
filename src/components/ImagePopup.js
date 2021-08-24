@@ -1,4 +1,4 @@
-export const ImagePopup = ({card, onClose}) => {
+function ImagePopup ({card, onClose}) {
   return (
     <div className={`popup popup_type_image${Object.keys(card).length ? ' popup_opened' : ''}`} onClick={onClose}>
       <div className="popup__image-container">
@@ -11,3 +11,5 @@ export const ImagePopup = ({card, onClose}) => {
     </div>
   )
 }
+
+export default ImagePopup;

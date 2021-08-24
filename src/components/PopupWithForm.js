@@ -1,4 +1,4 @@
-export const PopupWithForm = ({ title, name, children, isOpen, onClose }) => {
+function PopupWithForm ({ title, name, children, isOpen, onClose }) {
   return (
     <div className={`popup popup_type_${name}${isOpen ? ' popup_opened' : ''}`} onClick={onClose}>
       <form method="POST" className="popup__container" name={name} noValidate>
@@ -9,3 +9,5 @@ export const PopupWithForm = ({ title, name, children, isOpen, onClose }) => {
     </div>
   )
 }
+
+export default PopupWithForm;

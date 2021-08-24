@@ -1,4 +1,4 @@
-export const Card = ({card, onCardClick}) => {
+function Card ({card, onCardClick}) {
   function handleClick() {
     onCardClick(card);
   }
@@ -18,3 +18,4 @@ export const Card = ({card, onCardClick}) => {
     </li>
   )
 }
+export default Card;

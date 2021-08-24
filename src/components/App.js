@@ -1,10 +1,10 @@
 import '../index.css'
 import { useState } from 'react'
 import { Header } from './Header'
-import { Main } from './Main'
-import { Footer } from './Footer'
-import { PopupWithForm } from './PopupWithForm'
-import { ImagePopup } from './ImagePopup'
+import Main from './Main'
+import Footer from './Footer'
+import PopupWithForm from './PopupWithForm'
+import ImagePopup from './ImagePopup'
 
 function App() {
   // для попапа большого изображения
