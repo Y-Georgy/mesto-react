@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { api } from '../utils/Api'
 import { Card } from './Card'
 
-export const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) => {
+function Main ({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
   const [userName, setUserName] = useState('')
   const [userDescription, setUserDescription] = useState('')
   const [userAvatar, setUserAvatar] = useState('')
@@ -55,3 +55,5 @@ export const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) =
     </main>
   )
 }
+
+export default Main;
