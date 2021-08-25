@@ -1,12 +1,12 @@
-function Card ({card, onCardClick}) {
+function Card({ card, onCardClick }) {
   function handleClick() {
-    onCardClick(card);
+    onCardClick(card)
   }
 
   return (
     <li className="element">
       <div className="element__overlay-img" onClick={handleClick}></div>
-      <img className="element__img" src={card.link} alt="Фотография карточки" />
+      <img className="element__img" src={card.link} alt={card.name} />
       <div className="element__name-overlay">
         <h2 className="element__title">{card.name}</h2>
         <div className="element__like-overlay">
@@ -18,4 +18,4 @@ function Card ({card, onCardClick}) {
     </li>
   )
 }
-export default Card;
+export default Card

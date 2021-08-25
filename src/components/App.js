@@ -1,5 +1,5 @@
 import '../index.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from './Header'
 import Main from './Main'
 import Footer from './Footer'
@@ -8,10 +8,10 @@ import ImagePopup from './ImagePopup'
 
 function App() {
   // для попапа большого изображения
-  const [selectedCard, setSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState({})
 
   function handleCardClick(card) {
-    setSelectedCard(card);
+    setSelectedCard(card)
   }
 
   // обработчики кнопок на странице
@@ -30,14 +30,32 @@ function App() {
   }
 
   // закрытие всех попапов
-  function closeAllPopups(e) {
+  function closeAllPopups() {
+    setIsEditAvatarPopupOpen(false)
+    setIsEditProfilePopupOpen(false)
+    setIsAddPlacePopupOpen(false)
+    setSelectedCard({})
+  }
+
+  // обработчик клика закрытия попапов
+  function handlePopupClose(e) {
     if (e.target.classList.contains('popup_opened') || e.target.classList.contains('popup__icon-close')) {
-      setIsEditAvatarPopupOpen(false)
-      setIsEditProfilePopupOpen(false)
-      setIsAddPlacePopupOpen(false)
-      setSelectedCard({})
+      closeAllPopups()
     }
   }
+
+  // обработчик клика Escape
+  useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeAllPopups()
+      }
+    }
+
+    document.addEventListener('keydown', closeByEscape)
+
+    return () => document.removeEventListener('keydown', closeByEscape) // слушатель не снимается ведь?
+  }, [])
 
   return (
     <div className="page">
@@ -45,60 +63,30 @@ function App() {
       <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} />
       <Footer footerText="© 2021 Mesto Russia" />
 
-      <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+      <ImagePopup card={selectedCard} onClose={handlePopupClose} />
 
-      <PopupWithForm name="edit" title="Редактировать профиль" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm name="edit" title="Редактировать профиль" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} onClose={handlePopupClose}>
         <input placeholder="Имя" type="text" className="popup__input popup__input_type_name" name="name" required minLength="2" maxLength="40" id="name-input" />
         <span className="popup__error name-input-error"></span>
         <input placeholder="О себе" type="text" className="popup__input popup__input_type_job" name="about" required minLength="2" maxLength="200" id="job-input" />
         <span className="popup__error job-input-error"></span>
-        <button type="submit" className="popup__submit-button">
-          Сохранить
-        </button>
       </PopupWithForm>
 
-      <PopupWithForm name="add" title="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm name="add" title="Новое место" buttonText="Создать" isOpen={isAddPlacePopupOpen} onClose={handlePopupClose}>
         <input placeholder="Название" type="text" className="popup__input popup__input_type_title" name="name" required id="title-input" minLength="2" maxLength="30" />
         <span className="popup__error title-input-error"></span>
         <input placeholder="Ссылка на картинку" type="url" className="popup__input popup__input_type_link" name="link" required id="link-input" />
         <span className="popup__error link-input-error"></span>
-        <button type="submit" className="popup__submit-button">
-          Создать
-        </button>
       </PopupWithForm>
 
-      <PopupWithForm name="confirm" title="Вы уверены?" onClose={closeAllPopups}>
-        <button type="submit" className="popup__submit-button">
-          Да
-        </button>
-      </PopupWithForm>
+      <PopupWithForm name="confirm" title="Вы уверены?" buttonText="Да" onClose={handlePopupClose}></PopupWithForm>
 
-      <PopupWithForm name="avatar" title="Обновить аватар" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm name="avatar" title="Обновить аватар" buttonText="Сохранить" isOpen={isEditAvatarPopupOpen} onClose={handlePopupClose}>
         <input placeholder="Ссылка на фото" type="url" className="popup__input popup__input_type_link" name="avatar" required id="avatar-input" />
         <span className="popup__error avatar-input-error"></span>
-        <button type="submit" className="popup__submit-button">
-          Сохранить
-        </button>
       </PopupWithForm>
     </div>
   )
 }
 
 export default App
-
-// <div className="App">
-//    <header className="App-header">
-//      <img src={logo} className="App-logo" alt="logo" />
-//      <p>
-//        Edit <code>src/App.js</code> and save to reload.
-//      </p>
-//      <a
-//        className="App-link"
-//        href="https://reactjs.org"
-//        target="_blank"
-//        rel="noopener noreferrer"
-//      >
-//        Learn React
-//      </a>
-//    </header>
-//  </div>
