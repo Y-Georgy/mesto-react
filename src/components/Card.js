@@ -1,19 +1,23 @@
 import React from 'react'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
-function Card({ card, onCardClick }) {
+function Card({ card, onCardClick, onCardLike }) {
   const currentUser = React.useContext(CurrentUserContext)
 
   // Определяем, являемся ли мы владельцем текущей карточки
   const isOwn = card.owner._id === currentUser._id
-  const cardDeleteButtonClassName = `element__icon-delete${!isOwn ? 'element__icon-delete_hidden' : ''}`
+  const cardDeleteButtonClassName = `element__icon-delete${isOwn ? '' : ' element__icon-delete_hidden'}`
 
   // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
   const isLiked = card.likes.some((i) => i._id === currentUser._id)
-  const cardLikeButtonClassName = `element__icon-like${isLiked ? 'element__icon-like_active' : ''}`
+  const cardLikeButtonClassName = `element__icon-like${isLiked ? ' element__icon-like_active' : ''}`
 
   function handleClick() {
     onCardClick(card)
+  }
+
+  function handleLikeClick() {
+    onCardLike(card)
   }
 
   return (
@@ -26,7 +30,7 @@ function Card({ card, onCardClick }) {
           {currentUser.name}
         </h2>
         <div className="element__like-overlay">
-          <button type="button" className={cardLikeButtonClassName} aria-label="Нравиться"></button>
+          <button type="button" className={cardLikeButtonClassName} aria-label="Нравиться" onClick={handleLikeClick}></button>
           <span className="element__like-quantity">{card.likes.length}</span>
         </div>
       </div>

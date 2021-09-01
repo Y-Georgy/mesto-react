@@ -56,6 +56,7 @@
 @import url(./blocks/element/__icon-like/element__icon-like.css);
 @import url(./blocks/element/__icon-like/_active/element__icon-like_active.css);
 @import url(./blocks/element/__icon-delete/element__icon-delete.css);
+@import url(./blocks/element/__icon-delete/_hidden/element__icon-delete_hidden.css);
 @import url(./blocks/element/__like-overlay/element__like-overlay.css);
 @import url(./blocks/element/__like-quantity/element__like-quantity.css);
 @import url(./blocks/element/__overlay-img/element__overlay-img.css);

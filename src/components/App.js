@@ -9,9 +9,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/Api'
 
 function App() {
-  // Пользователь
+  // Получение данных пользователя
   const [currentUser, setCurrentUser] = useState({})
-
   useEffect(() => {
     api
       .getProfile()

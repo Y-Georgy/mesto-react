@@ -5,23 +5,8 @@ import { api } from '../utils/Api'
 import Card from './Card'
 
 function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-  // const [userName, setUserName] = useState('')
-  // const [userDescription, setUserDescription] = useState('')
-  // const [userAvatar, setUserAvatar] = useState('')
-
+  // подписка на контекст данных профиля
   const currentUser = React.useContext(CurrentUserContext)
-
-  // получение данных профиля
-  // useEffect(() => {
-  //   api
-  //     .getProfile()
-  //     .then((profileInfo) => {
-  //       setUserName(profileInfo.name)
-  //       setUserDescription(profileInfo.about)
-  //       setUserAvatar(profileInfo.avatar)
-  //     })
-  //     .catch((rej) => console.log(rej))
-  // }, [])
 
   // получение карточек с сервера
   const [cards, setCards] = useState([])
@@ -34,6 +19,18 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       })
       .catch((rej) => console.log(rej))
   }, [])
+
+  // лайки
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some((i) => i._id === currentUser._id)
+
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+      // setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)))
+      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)))
+    })
+  }
 
   return (
     <main className="content">
@@ -54,7 +51,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       <section className="elements">
         <ul className="elements__list">
           {cards.map((card) => (
-            <Card key={card._id} card={card} onCardClick={onCardClick} />
+            <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={handleCardLike} />
           ))}
         </ul>
       </section>
