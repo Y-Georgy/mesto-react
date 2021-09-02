@@ -9,6 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/Api'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
+import AddPlacePopup from './AddPlacePopup'
 
 function App() {
   // Получение данных пользователя
@@ -82,11 +83,48 @@ function App() {
         closeAllPopups()
       }
     }
-
     document.addEventListener('keydown', closeByEscape)
-
     return () => document.removeEventListener('keydown', closeByEscape) // слушатель не снимается ведь?
   }, [])
+
+  // КАРТОЧКИ
+  // получение карточек с сервера
+  const [cards, setCards] = useState([])
+
+  useEffect(() => {
+    api
+      .getCards()
+      .then((res) => {
+        setCards(res)
+      })
+      .catch((rej) => console.log(rej))
+  }, [])
+
+  // лайки
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some((i) => i._id === currentUser._id)
+
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)))
+    })
+  }
+
+  // удаление карточки
+  function handleCardDelete(card) {
+    api.deleteCard(card._id).then((res) => {
+      setCards((cards) => cards.filter((c) => c._id !== card._id))
+    })
+  }
+
+  // ДОБАВЛЕНИЕ КАРТОЧКИ
+  function handleAddPlaceSubmit(card) {
+    api.addCard(card).then((newCard) => {
+      setCards([newCard, ...cards])
+      closeAllPopups()
+    })
+  }
 
   return (
     <div className="page">
@@ -97,10 +135,14 @@ function App() {
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onCardClick={handleCardClick}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
         />
         <Footer footerText="© 2021 Mesto Russia" />
 
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={handlePopupClose} onUpdateUser={handleUpdateUser} />
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={handlePopupClose} onAddPlace={handleAddPlaceSubmit} />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={handlePopupClose}
@@ -108,35 +150,6 @@ function App() {
         />
         <ImagePopup card={selectedCard} onClose={handlePopupClose} />
         <PopupWithForm name="confirm" title="Вы уверены?" buttonText="Да" onClose={handlePopupClose}></PopupWithForm>
-
-        <PopupWithForm
-          name="add"
-          title="Новое место"
-          buttonText="Создать"
-          isOpen={isAddPlacePopupOpen}
-          onClose={handlePopupClose}
-        >
-          <input
-            placeholder="Название"
-            type="text"
-            className="popup__input popup__input_type_title"
-            name="name"
-            required
-            id="title-input"
-            minLength="2"
-            maxLength="30"
-          />
-          <span className="popup__error title-input-error"></span>
-          <input
-            placeholder="Ссылка на картинку"
-            type="url"
-            className="popup__input popup__input_type_link"
-            name="link"
-            required
-            id="link-input"
-          />
-          <span className="popup__error link-input-error"></span>
-        </PopupWithForm>
       </CurrentUserContext.Provider>
     </div>
   )
