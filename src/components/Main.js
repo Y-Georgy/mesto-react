@@ -27,8 +27,14 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      // setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)))
       setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)))
+    })
+  }
+
+  // удаление карточки
+  function handleCardDelete(card) {
+    api.deleteCard(card._id).then((res) => {
+      setCards((cards) => cards.filter((c) => c._id !== card._id))
     })
   }
 
@@ -41,7 +47,12 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
           <div className="profile__text">
             <div className="profile__title-overlay">
               <h1 className="profile__title">{currentUser.name}</h1>
-              <button type="button" className="profile__edit-button" aria-label="Редактировать" onClick={onEditProfile}></button>
+              <button
+                type="button"
+                className="profile__edit-button"
+                aria-label="Редактировать"
+                onClick={onEditProfile}
+              ></button>
             </div>
             <p className="profile__subtitle">{currentUser.about}</p>
           </div>
@@ -51,7 +62,13 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       <section className="elements">
         <ul className="elements__list">
           {cards.map((card) => (
-            <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={handleCardLike} />
+            <Card
+              key={card._id}
+              card={card}
+              onCardClick={onCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
           ))}
         </ul>
       </section>
