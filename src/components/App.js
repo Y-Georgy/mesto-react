@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/Api'
 import EditProfilePopup from './EditProfilePopup'
+import EditAvatarPopup from './EditAvatarPopup'
 
 function App() {
   // Получение данных пользователя
@@ -66,6 +67,14 @@ function App() {
     })
   }
 
+  // обработчик обновления аватарки
+  function handleUpdateAvatar(avatar) {
+    api.updateAvatar(avatar).then((newProfile) => {
+      setCurrentUser(newProfile)
+      closeAllPopups()
+    })
+  }
+
   // обработчик клика Escape
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -91,9 +100,14 @@ function App() {
         />
         <Footer footerText="© 2021 Mesto Russia" />
 
-        <ImagePopup card={selectedCard} onClose={handlePopupClose} />
-
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={handlePopupClose} onUpdateUser={handleUpdateUser} />
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={handlePopupClose}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
+        <ImagePopup card={selectedCard} onClose={handlePopupClose} />
+        <PopupWithForm name="confirm" title="Вы уверены?" buttonText="Да" onClose={handlePopupClose}></PopupWithForm>
 
         <PopupWithForm
           name="add"
@@ -122,26 +136,6 @@ function App() {
             id="link-input"
           />
           <span className="popup__error link-input-error"></span>
-        </PopupWithForm>
-
-        <PopupWithForm name="confirm" title="Вы уверены?" buttonText="Да" onClose={handlePopupClose}></PopupWithForm>
-
-        <PopupWithForm
-          name="avatar"
-          title="Обновить аватар"
-          buttonText="Сохранить"
-          isOpen={isEditAvatarPopupOpen}
-          onClose={handlePopupClose}
-        >
-          <input
-            placeholder="Ссылка на фото"
-            type="url"
-            className="popup__input popup__input_type_link"
-            name="avatar"
-            required
-            id="avatar-input"
-          />
-          <span className="popup__error avatar-input-error"></span>
         </PopupWithForm>
       </CurrentUserContext.Provider>
     </div>
