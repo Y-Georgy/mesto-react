@@ -10,6 +10,7 @@ import { api } from '../utils/Api'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
+import ConfirmPopup from './ConfirmPopup'
 
 function App() {
   // Получение данных пользователя
@@ -34,6 +35,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
+  const [cardToDelete, setCardToDelete] = useState({})
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
@@ -45,11 +48,17 @@ function App() {
     setIsAddPlacePopupOpen(true)
   }
 
+  function handleCardDelete(card) {
+    setIsConfirmPopupOpen(true)
+    setCardToDelete(card)
+  }
+
   // закрытие всех попапов
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false)
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
+    setIsConfirmPopupOpen(false)
     setSelectedCard({})
   }
 
@@ -121,11 +130,12 @@ function App() {
   }
 
   // удаление карточки
-  function handleCardDelete(card) {
+  function handleConfirm() {
     api
-      .deleteCard(card._id)
+      .deleteCard(cardToDelete._id)
       .then((res) => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id))
+        setCards((cards) => cards.filter((c) => c._id !== cardToDelete._id))
+        closeAllPopups()
       })
       .catch((rej) => console.log(rej))
   }
@@ -166,7 +176,7 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
         <ImagePopup card={selectedCard} onClose={handlePopupClose} />
-        <PopupWithForm name="confirm" title="Вы уверены?" buttonText="Да" onClose={handlePopupClose}></PopupWithForm>
+        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={handlePopupClose} onConfirm={handleConfirm}></ConfirmPopup>
       </CurrentUserContext.Provider>
     </div>
   )
