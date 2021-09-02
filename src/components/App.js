@@ -62,18 +62,24 @@ function App() {
 
   // обработчик обновления профиля
   function handleUpdateUser(profile) {
-    api.addProfile(profile).then((newProfile) => {
-      setCurrentUser(newProfile)
-      closeAllPopups()
-    })
+    api
+      .addProfile(profile)
+      .then((newProfile) => {
+        setCurrentUser(newProfile)
+        closeAllPopups()
+      })
+      .catch((rej) => console.log(rej))
   }
 
   // обработчик обновления аватарки
   function handleUpdateAvatar(avatar) {
-    api.updateAvatar(avatar).then((newProfile) => {
-      setCurrentUser(newProfile)
-      closeAllPopups()
-    })
+    api
+      .updateAvatar(avatar)
+      .then((newProfile) => {
+        setCurrentUser(newProfile)
+        closeAllPopups()
+      })
+      .catch((rej) => console.log(rej))
   }
 
   // обработчик клика Escape
@@ -106,24 +112,33 @@ function App() {
     const isLiked = card.likes.some((i) => i._id === currentUser._id)
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)))
-    })
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)))
+      })
+      .catch((rej) => console.log(rej))
   }
 
   // удаление карточки
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((res) => {
-      setCards((cards) => cards.filter((c) => c._id !== card._id))
-    })
+    api
+      .deleteCard(card._id)
+      .then((res) => {
+        setCards((cards) => cards.filter((c) => c._id !== card._id))
+      })
+      .catch((rej) => console.log(rej))
   }
 
   // ДОБАВЛЕНИЕ КАРТОЧКИ
   function handleAddPlaceSubmit(card) {
-    api.addCard(card).then((newCard) => {
-      setCards([newCard, ...cards])
-      closeAllPopups()
-    })
+    api
+      .addCard(card)
+      .then((newCard) => {
+        setCards([newCard, ...cards])
+        closeAllPopups()
+      })
+      .catch((rej) => console.log(rej))
   }
 
   return (
@@ -142,7 +157,9 @@ function App() {
         <Footer footerText="© 2021 Mesto Russia" />
 
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={handlePopupClose} onUpdateUser={handleUpdateUser} />
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={handlePopupClose} onAddPlace={handleAddPlaceSubmit} />
+        {isAddPlacePopupOpen && (
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={handlePopupClose} onAddPlace={handleAddPlaceSubmit} />
+        )}
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={handlePopupClose}

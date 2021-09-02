@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PopupWithForm from './PopupWithForm'
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
@@ -8,10 +8,15 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   function handleSubmit(e) {
     e.preventDefault()
     onAddPlace({
-      name: name,
-      link: link,
+      name,
+      link,
     })
   }
+
+  useEffect(() => {
+    setName('')
+    setLink('')
+  }, [isOpen, onClose])
 
   function handleChangeName(e) {
     setName(e.target.value)
