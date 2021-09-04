@@ -14,6 +14,7 @@
 
 /* main */
 @import url(./blocks/content/content.css);
+@import url(./blocks/loading/loading.css);
 
 /* profile */
 @import url(./blocks/profile/profile.css);
