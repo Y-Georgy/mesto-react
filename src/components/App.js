@@ -1,4 +1,5 @@
 import '../index.css'
+import Loading from './Loading'
 import { useEffect, useState } from 'react'
 import { Header } from './Header'
 import Main from './Main'
@@ -13,6 +14,7 @@ import ConfirmPopup from './ConfirmPopup'
 import { initialCards, initialProfile } from '../utils/constants'
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
 
@@ -28,6 +30,7 @@ function App() {
         setCards(initialCards)
         alert(`Данные профиля и карточек не обновились. Ошибка - ${err}`)
       })
+      .finally(() => setIsLoading(false))
   }, [])
 
   // для попапа большого изображения
@@ -148,28 +151,42 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
-        <Main
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
-        <Footer footerText="© 2021 Mesto Russia" />
 
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={handlePopupClose} onUpdateUser={handleUpdateUser} />
-        {isAddPlacePopupOpen && (
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={handlePopupClose} onAddPlace={handleAddPlaceSubmit} />
+        {isLoading && <Loading />}
+        {!isLoading && (
+          <>
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
+
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={handlePopupClose}
+              onUpdateUser={handleUpdateUser}
+            />
+            {isAddPlacePopupOpen && (
+              <AddPlacePopup
+                isOpen={isAddPlacePopupOpen}
+                onClose={handlePopupClose}
+                onAddPlace={handleAddPlaceSubmit}
+              />
+            )}
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={handlePopupClose}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
+            <ImagePopup card={selectedCard} onClose={handlePopupClose} />
+            <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={handlePopupClose} onConfirm={handleConfirm} />
+          </>
         )}
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={handlePopupClose}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <ImagePopup card={selectedCard} onClose={handlePopupClose} />
-        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={handlePopupClose} onConfirm={handleConfirm} />
+        <Footer footerText="© 2021 Mesto Russia" />
       </CurrentUserContext.Provider>
     </div>
   )
