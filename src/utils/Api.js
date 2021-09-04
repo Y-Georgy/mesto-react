@@ -79,6 +79,7 @@ class Api {
 
   // обновление аватарки
   updateAvatar(avatar) {
+    console.log(avatar)
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,

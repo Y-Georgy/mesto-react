@@ -14,7 +14,7 @@ function ConfirmPopup({ isOpen, onClose, onConfirm }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-    ></PopupWithForm>
+    />
   )
 }
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { Header } from './Header'
 import Main from './Main'
 import Footer from './Footer'
-import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/Api'
@@ -11,17 +10,24 @@ import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
 import ConfirmPopup from './ConfirmPopup'
+import { initialCards, initialProfile } from '../utils/constants'
 
 function App() {
-  // Получение данных пользователя
   const [currentUser, setCurrentUser] = useState({})
+  const [cards, setCards] = useState([])
+
+  // Получение карточек и данных пользователя
   useEffect(() => {
-    api
-      .getProfile()
-      .then((profileInfo) => {
+    Promise.all([api.getProfile(), api.getCards()])
+      .then(([profileInfo, cards]) => {
         setCurrentUser(profileInfo)
+        setCards(cards)
       })
-      .catch((rej) => console.log(rej))
+      .catch((err) => {
+        setCurrentUser(initialProfile)
+        setCards(initialCards)
+        alert(`Данные профиля и карточек не обновились. Ошибка - ${err}`)
+      })
   }, [])
 
   // для попапа большого изображения
@@ -64,7 +70,7 @@ function App() {
 
   // обработчик клика закрытия попапов
   function handlePopupClose(e) {
-    if (e.target.classList.contains('popup_opened') || e.target.classList.contains('popup__icon-close')) {
+    if (e.target === e.currentTarget) {
       closeAllPopups()
     }
   }
@@ -98,22 +104,9 @@ function App() {
         closeAllPopups()
       }
     }
-    document.addEventListener('keydown', closeByEscape)
-    return () => document.removeEventListener('keydown', closeByEscape) // слушатель не снимается ведь?
-  }, [])
-
-  // КАРТОЧКИ
-  // получение карточек с сервера
-  const [cards, setCards] = useState([])
-
-  useEffect(() => {
-    api
-      .getCards()
-      .then((res) => {
-        setCards(res)
-      })
-      .catch((rej) => console.log(rej))
-  }, [])
+    document.addEventListener('keyup', closeByEscape)
+    return () => document.removeEventListener('keyup', closeByEscape) // TODO слушатель не снимается
+  }, [selectedCard, isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isConfirmPopupOpen])
 
   // лайки
   function handleCardLike(card) {
@@ -176,10 +169,9 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
         <ImagePopup card={selectedCard} onClose={handlePopupClose} />
-        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={handlePopupClose} onConfirm={handleConfirm}></ConfirmPopup>
+        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={handlePopupClose} onConfirm={handleConfirm} />
       </CurrentUserContext.Provider>
     </div>
   )
 }
-
 export default App

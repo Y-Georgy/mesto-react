@@ -4,7 +4,7 @@ function ImagePopup({ card, onClose }) {
       <div className="popup__image-container">
         <div className="popup__image-overlay">
           <img src={card.link} className="popup__image" alt={card.name} />
-          <button type="button" className="popup__icon-close" aria-label="Закрыть"></button>
+          <button type="button" className="popup__icon-close" aria-label="Закрыть" onClick={onClose}></button>
           <p className="popup__image-signature">{card.name}</p>
         </div>
       </div>
