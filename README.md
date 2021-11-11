@@ -6,7 +6,7 @@
 ### Стек
 
 ```
-- React
+- React.js
 - JavaScript
 - JSX
 - CSS3
